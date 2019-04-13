@@ -22,6 +22,7 @@ const addElement = () => {
 				const ulEl = $(ulOpen + ulClose);
 				elementToAppend.append(ulEl.append(newElement));
 			}
+			newElement.click();
 		}
 	}
 	cleanInputs();
@@ -51,6 +52,8 @@ const getPositionText = (el) => {
 const onLiClick = (clickedElement, event) => {
 	event.stopPropagation();
 	// unfold selected list
+	$('li').css('color', 'black');
+	clickedElement.css('color', 'blue');
 	foldUnselectedList(clickedElement);
 	unfoldSelectedList(clickedElement);
 };
@@ -65,15 +68,14 @@ const foldUnselectedList = element => {
 const unfoldSelectedList = element => {
 	if (element.length && element.children('ul').length) {
 		element.children('ul').slideDown();
-		foldSelectedSecondChildren(element.children('ul'));
+		foldSelectedSecondChildrens(element.children('ul'));
 	}
 }
 
-const foldSelectedSecondChildren = element => {
-	debugger;
+const foldSelectedSecondChildrens = element => {
 	if (element.length && element.children('li').length) {
 		element.children('li').children('ul').slideUp();
-		foldSelectedSecondChildren(element.children('li').children('ul'));
+		foldSelectedSecondChildrens(element.children('li').children('ul'));
 	}
 }
 
