@@ -1,0 +1,13 @@
+html,
+body,
+.container {
+	min-height: 100vh;
+}
+.container {
+	margin-top: 3em;
+}
+button.btn.btn-primary {
+	font-size: 36px;
+	min-width: 222px;
+	position: relative;
+}
