@@ -23,6 +23,8 @@ const addElement = () => {
 				elementToAppend.append(ulEl.append(newElement));
 			}
 			newElement.click();
+		} else {
+			alert('No hi ha cap element amb aquest nom!');		
 		}
 	}
 	cleanInputs();
