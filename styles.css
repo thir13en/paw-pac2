@@ -9,4 +9,5 @@ body,
 button.btn.btn-primary {
 	font-size: 36px;
 	min-width: 222px;
+	position: relative;
 }
