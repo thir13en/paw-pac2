@@ -11,3 +11,7 @@ button {
 input {
 	padding: .3em .5em;
 }
+li {
+	list-style-type: none;
+	cursor: pointer;
+}

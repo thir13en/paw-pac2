@@ -7,21 +7,20 @@ const addElement = () => {
 	const liClose = '</li>';
 
 	if (text && text.length) {
-		/** there is no content yet */
-		if ($('.list-container').html() === '') {
-			$('.list-container').html(ulOpen + liOpen + text + liClose + ulClose);
-		} else {		
-			if (parentText) {
-				const referencedEl = getReferencedEl($('.list-container li'), parentText);
-				if (referencedEl) {
-					if(referencedEl.children('ul').length) {
-						referencedEl.children('ul').append(liOpen + text + liClose);
-					} else {
-						referencedEl.append(ulOpen + liOpen + text + liClose + ulClose);
-					}
-				}
+		/** obtenir l'element per fer append */
+		const elementToAppend = ($('.list-container').html() === '' || !parentText) ?
+									$('.list-container') :
+									getReferencedEl($('.list-container li'), parentText);
+
+		if (elementToAppend) {
+			// create new element that will be appended
+			const newElement = $(liOpen + getPositionText(elementToAppend) + text + liClose);
+			newElement.click(e => onLiClick(newElement, e));
+			if(elementToAppend.children('ul').length) {
+				elementToAppend.children('ul').append(newElement);
 			} else {
-				$('.list-container > ul').append(liOpen + text + liClose);
+				const ulEl = $(ulOpen + ulClose);
+				elementToAppend.append(ulEl.append(newElement));
 			}
 		}
 	}
@@ -37,11 +36,44 @@ const getReferencedEl = (elements, text) => {
 	let element;
 
 	elements.each(el => {
-		if (elements[el].innerText.split('\n')[0] === text) {
+		if (elements[el].innerText.split('\n')[0].split(' ')[1] === text) {
 			return element = el;
 		}
 	});
 
 	return elements[element] ? $(elements[element]) : undefined;
+}
+
+const getPositionText = (el) => {
+	return (el.children('ul').children('li').length + 1) + '. ';
+}
+
+const onLiClick = (clickedElement, event) => {
+	event.stopPropagation();
+	// unfold selected list
+	foldUnselectedList(clickedElement);
+	unfoldSelectedList(clickedElement);
+};
+
+const foldUnselectedList = element => {
+	if (element.length && element.parent('ul').length) {
+		element.siblings('li').children('ul').slideUp();
+		foldUnselectedList(element.parent('ul').parent('li'));
+	}
+}
+
+const unfoldSelectedList = element => {
+	if (element.length && element.children('ul').length) {
+		element.children('ul').slideDown();
+		foldSelectedSecondChildren(element.children('ul'));
+	}
+}
+
+const foldSelectedSecondChildren = element => {
+	debugger;
+	if (element.length && element.children('li').length) {
+		element.children('li').children('ul').slideUp();
+		foldSelectedSecondChildren(element.children('li').children('ul'));
+	}
 }
 
